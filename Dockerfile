@@ -1,5 +1,5 @@
 # Pull baseimage
-FROM phusion/baseimage-docker
+FROM phusion/baseimage
 
 # Install Java.
 RUN \
