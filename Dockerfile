@@ -1,7 +1,6 @@
 ################################################################################
 # Pull baseimage and start
-ENV BASE_VERSION 0.9.15
-FROM phusion/baseimage:$BASE_VERSION
+FROM phusion/baseimage:0.9.15
 
 ENV HOME /root
 
