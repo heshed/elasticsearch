@@ -22,7 +22,8 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 ################################################################################
 # Install Python.
-RUN apt-get install -y python python2.7 python-dev python-distribute python-pip
+# apt-get install python-software-properties
+#RUN apt-get install -y python python2.7 python-dev python-distribute python-pip
 
 # Clean apt.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -53,7 +54,7 @@ RUN /elasticsearch/bin/plugin -install mobz/elasticsearch-head
 RUN /elasticsearch/bin/plugin -install lukas-vlcek/bigdesk
 RUN /elasticsearch/bin/plugin -install karmi/elasticsearch-paramedicl
 #RUN /logstash/bin/plugin install contrib
-RUN pip install elasticsearch-curator
+#RUN pip install elasticsearch-curator
 
 ################################################################################
 # ELK Settings
