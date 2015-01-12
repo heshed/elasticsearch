@@ -43,16 +43,16 @@ ENV KIBANA4_DOWNLOAD_URL https://download.elasticsearch.org/kibana/kibana/$KIBAN
 ################################################################################
 # Install ELK
 WORKDIR /
-RUN wget --no-check-certificate -O- $ES_DOWNLOAD_URL && tar xvfz - && mv /$ES_PKG_NAME /elasticsearch
-RUN wget --no-check-certificate -O- $LOGSTASH_DOWNLOAD_URL && tar xvfz - && mv /$LOGSTASH_PKG_NAME /logstash
-#RUN wget --no-check-certificate -O- $KIBANA3_DOWNLOAD_URL && tar xvfz - && mv /$KIBANA3_PKG_NAME /kibana3
-RUN wget --no-check-certificate -O- $KIBANA4_DOWNLOAD_URL && tar xvfz - && mv /$KIBANA4_PKG_NAME /kibana4
+RUN wget --no-check-certificate -O - $ES_DOWNLOAD_URL | tar xvfz - && mv /$ES_PKG_NAME /elasticsearch
+RUN wget --no-check-certificate -O - $LOGSTASH_DOWNLOAD_URL | tar xvfz - && mv /$LOGSTASH_PKG_NAME /logstash
+#RUN wget --no-check-certificate -O - $KIBANA3_DOWNLOAD_URL | tar xvfz - && mv /$KIBANA3_PKG_NAME /kibana3
+RUN wget --no-check-certificate -O - $KIBANA4_DOWNLOAD_URL | tar xvfz - && mv /$KIBANA4_PKG_NAME /kibana4
 
 # Install es plugins
 RUN /elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
 RUN /elasticsearch/bin/plugin -install mobz/elasticsearch-head
 RUN /elasticsearch/bin/plugin -install lukas-vlcek/bigdesk
-RUN /elasticsearch/bin/plugin -install karmi/elasticsearch-paramedicl
+RUN /elasticsearch/bin/plugin -install karmi/elasticsearch-paramedic
 #RUN /logstash/bin/plugin install contrib
 #RUN pip install elasticsearch-curator
 
