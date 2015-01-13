@@ -43,10 +43,12 @@ ENV KIBANA4_DOWNLOAD_URL https://download.elasticsearch.org/kibana/kibana/$KIBAN
 ################################################################################
 # Install ELK
 WORKDIR /
-RUN wget --no-check-certificate -O - $ES_DOWNLOAD_URL | tar xvfz - && mv /$ES_PKG_NAME /elasticsearch
-RUN wget --no-check-certificate -O - $LOGSTASH_DOWNLOAD_URL | tar xvfz - && mv /$LOGSTASH_PKG_NAME /logstash
+RUN wget --no-check-certificate -O - $ES_DOWNLOAD_URL | tar xfz - && mv /$ES_PKG_NAME /elasticsearch
+RUN wget --no-check-certificate -O - $LOGSTASH_DOWNLOAD_URL | tar xfz - && mv /$LOGSTASH_PKG_NAME /logstash
 #RUN wget --no-check-certificate -O - $KIBANA3_DOWNLOAD_URL | tar xvfz - && mv /$KIBANA3_PKG_NAME /kibana3
-RUN wget --no-check-certificate -O - $KIBANA4_DOWNLOAD_URL | tar xvfz - && mv /$KIBANA4_PKG_NAME /kibana4
+RUN wget --no-check-certificate -O - $KIBANA4_DOWNLOAD_URL | tar xfz - && mv /$KIBANA4_PKG_NAME /kibana4
+
+
 
 # Install es plugins
 RUN /elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ
@@ -58,9 +60,12 @@ RUN /elasticsearch/bin/plugin -install karmi/elasticsearch-paramedic
 
 ################################################################################
 # ELK Settings
-ENV CONFIG_DIR config
-ADD $CONFIG_DIR/elasticsearch.yml /elasticsearch/config/elasticsearch.yml
-ADD $CONFIG_DIR/config.js /kibana/config.js
+RUN mkdir /config
+
+ADD config/elasticsearch.yml /config/elasticsearch.yml
+#ADD config/config.js /config/config.js
+ADD config/kibana.yml /config/kibana.yml
+ADD config/logstash.conf /config/logstash.conf
 
 ################################################################################
 # Define default command.
@@ -71,23 +76,15 @@ CMD ["/kibana4/bin/kibana"]
 CMD ["/sbin/my_init"]
 
 # Define working directory.
-WORKDIR /data
+VOLUME /data
 
 # Expose ports.
 #   - 9200: ES HTTP
 #   - 9300: ES transport
 #   - 9292: Kibana
+#   - 3333: Logstash
 EXPOSE 9292
 EXPOSE 9200
 EXPOSE 9300
 EXPOSE 80
-
-################################################################################
-# TODO:Usage
-# run es
-# docker run -it --rm -p 9200:9200 -p 9300:9300 --name es heshed/elasticsearch /elasticsearch/bin/elasticsearch
-
-# docker run -it --rm -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> -p 9292:9292 -p 9200:9200 --link es:es heshed/elasticsearch /logstash/bin/logstash
-
-# docker run -it --rm -p 80:80 heshed/elasticsearch /kibana4/bin/kinana
-# docker run -it --rm -p 5000:5000 -p 5000:5000/udp --link es:elasticsearch heshed/elasticsearch -f /etc/logstash.conf.sample
+EXPOSE 3333
